@@ -12,7 +12,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Operating System :: OS Independent",
 ]
-dependencies = ["semgrep>1.68", "pyyaml"]
+dependencies = ["semgrep>1.68", "pyyaml", "security==1.3.1"]
 
 [project.optional-dependencies]
 external_llm = ["llama-recipes"]
