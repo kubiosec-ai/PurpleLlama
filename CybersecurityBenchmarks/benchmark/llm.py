@@ -1051,7 +1051,7 @@ class ANTHROPIC(LLM):
             ],
         }
 
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, timeout=60)
         json_response = response.json()
         content = json_response.get("content", [])
         if not content:
@@ -1099,7 +1099,7 @@ class ANTHROPIC(LLM):
             ],
             "system": system_prompt,
         }
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, timeout=60)
         json_response = response.json()
         content = json_response.get("content", [])
         if not content:
@@ -1150,7 +1150,7 @@ class ANTHROPIC(LLM):
             ],
             "system": system_prompt,
         }
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, timeout=60)
         json_response = response.json()
         content = json_response.get("content", [])
         if not content:
@@ -1213,7 +1213,7 @@ class ANTHROPIC(LLM):
         if system_prompt:
             data["system"] = system_prompt
 
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, timeout=60)
         json_response = response.json()
         content = json_response.get("content", [])
         if not content:
@@ -1273,7 +1273,7 @@ class GOOGLEGENAI(LLM):
         url = f"{self.BASE_API_URL}/v1beta/models/{self.model}:generateContent?key={self.api_key}"
         headers = {"Content-Type": "application/json"}
         data = {"contents": [{"parts": [{"text": prompt}], "role": "user"}]}
-        response = requests.post(url, headers=headers, data=json.dumps(data))
+        response = requests.post(url, headers=headers, data=json.dumps(data), timeout=60)
         json_response = response.json()
         response_str = json.dumps(json_response)
         if '[{"finishReason": "OTHER", "index": 0}]' in response_str:
@@ -1312,7 +1312,7 @@ class GOOGLEGENAI(LLM):
                 "maxOutputTokens": 2048,
             },
         }
-        response = requests.post(url, headers=headers, data=json.dumps(data))
+        response = requests.post(url, headers=headers, data=json.dumps(data), timeout=60)
         json_response = response.json()
         response_str = json.dumps(json_response)
         if '[{"finishReason": "OTHER", "index": 0}]' in response_str:
@@ -1371,7 +1371,7 @@ class GOOGLEGENAI(LLM):
                 "maxOutputTokens": 2048,
             },
         }
-        response = requests.post(url, headers=headers, data=json.dumps(data))
+        response = requests.post(url, headers=headers, data=json.dumps(data), timeout=60)
         json_response = response.json()
         candidates = json_response.get("candidates", [])
         if not candidates:
@@ -1405,7 +1405,7 @@ class GOOGLEGENAI(LLM):
             f"{self.BASE_API_URL}/upload/v1beta/files?key={self.api_key}",
             headers=headers,
             data=data,
-        )
+        timeout=60)
         response.raise_for_status()
 
         upload_url = response.headers.get("X-Goog-Upload-URL")
@@ -1420,7 +1420,7 @@ class GOOGLEGENAI(LLM):
             "X-Goog-Upload-Offset": "0",
             "X-Goog-Upload-Command": "upload, finalize",
         }
-        response = requests.post(upload_url, headers=headers, data=file_data)
+        response = requests.post(upload_url, headers=headers, data=file_data, timeout=60)
         file_info = response.json()
         file_uri = file_info.get("file", {}).get("uri")
 
@@ -1481,12 +1481,12 @@ class GOOGLEGENAI(LLM):
                 "role": "model",
             }
 
-        response = requests.post(url, headers=headers, data=json.dumps(data))
+        response = requests.post(url, headers=headers, data=json.dumps(data), timeout=60)
 
         # Delete files after query
         for file_uri in file_uris:
             delete_url = f"{file_uri}?key={self.api_key}"
-            delete_response = requests.delete(delete_url)
+            delete_response = requests.delete(delete_url, timeout=60)
             if not delete_response.ok:
                 print(f"[WARNING] Failed to delete file: {delete_response.text}")
 
