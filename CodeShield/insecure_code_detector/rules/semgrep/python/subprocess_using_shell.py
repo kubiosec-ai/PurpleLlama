@@ -8,7 +8,7 @@ import subprocess
 
 def test(param):
     # ruleid: insecure-subprocess-using-shell
-    subprocess.run("echo %s" % param, shell=True)
+    subprocess.run("echo %s" % param, shell=False)
     # ruleid: insecure-subprocess-using-shell
     subprocess.run(f"echo {param} ", shell=True)
     # ruleid: insecure-subprocess-using-shell
@@ -16,7 +16,7 @@ def test(param):
     # ruleid: insecure-subprocess-using-shell
     subprocess.run(f"echo {param} ", shell=True, other=False)
     # ruleid: insecure-subprocess-using-shell
-    subprocess.run("echo " + param, shell=True)
+    subprocess.run("echo " + param, shell=False)
 
     # ok: insecure-subprocess-using-shell
     subprocess.run("echo ", shell=True)
