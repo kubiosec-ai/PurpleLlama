@@ -26,6 +26,7 @@ import pkg_resources
 from async_lru import alru_cache
 from botocore import UNSIGNED
 from botocore.config import Config
+from security import safe_command
 
 
 class BuildStatus(Enum):
@@ -364,8 +365,7 @@ class ArvoContainer:
                 str(cls._get_build_dir()),
             ]
             # Run the build command synchronously using subprocess
-            result = subprocess.run(
-                build_cmd_args,
+            result = safe_command.run(subprocess.run, build_cmd_args,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,  # Combine stdout and stderr
                 text=True,
@@ -897,8 +897,7 @@ class ArvoContainer:
         cmd_str = " ".join(exec_cmd_args)
         self.logger.debug(f"Executing command: {cmd_str}.")
         stderr = subprocess.STDOUT if combine_outputs else subprocess.PIPE
-        result = subprocess.run(
-            exec_cmd_args,
+        result = safe_command.run(subprocess.run, exec_cmd_args,
             stdout=subprocess.PIPE,
             stderr=stderr,
         )
