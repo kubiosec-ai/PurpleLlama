@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Any, Dict, List, Optional, Tuple
+from security import safe_command
 
 
 class Config:
@@ -158,8 +159,7 @@ def dump_stacktrace(target: Path, config: Config):
         try:
             cmd = ["lldb", "-s", script_path, target, "--", *config.args]
             print(f"Running debugger: {repr(cmd)}")
-            subprocess_result = subprocess.run(
-                cmd,
+            subprocess_result = safe_command.run(subprocess.run, cmd,
                 timeout=config.timeout_seconds,
             ).returncode
         except subprocess.TimeoutExpired:

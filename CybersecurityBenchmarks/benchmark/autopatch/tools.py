@@ -20,6 +20,7 @@ from .types import (
     PatchGenerationReport,
     SanityCheckResult,
 )
+from security import safe_command
 
 
 class RedirectOutput:
@@ -226,4 +227,4 @@ def subprocess_run(
     cmd: List[str], check: bool = False, stdin: Optional[BufferedReader] = None
 ) -> subprocess.CompletedProcess[str]:
     logging.info(f"Running: {' '.join(shlex.quote(x) for x in cmd)}")
-    return subprocess.run(cmd, capture_output=True, check=check, text=True, stdin=stdin)
+    return safe_command.run(subprocess.run, cmd, capture_output=True, check=check, text=True, stdin=stdin)

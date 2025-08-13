@@ -4,23 +4,24 @@
 # LICENSE file in the root directory of this source tree.
 
 import subprocess
+from security import safe_command
 
 
 def test(param):
     # ruleid: insecure-subprocess-using-shell
-    subprocess.run("echo %s" % param, shell=True)
+    safe_command.run(subprocess.run, "echo %s" % param, shell=True)
     # ruleid: insecure-subprocess-using-shell
-    subprocess.run(f"echo {param} ", shell=True)
+    safe_command.run(subprocess.run, f"echo {param} ", shell=True)
     # ruleid: insecure-subprocess-using-shell
-    subprocess.run(f"echo {param} ", other=False, shell=True)
+    safe_command.run(subprocess.run, f"echo {param} ", other=False, shell=True)
     # ruleid: insecure-subprocess-using-shell
-    subprocess.run(f"echo {param} ", shell=True, other=False)
+    safe_command.run(subprocess.run, f"echo {param} ", shell=True, other=False)
     # ruleid: insecure-subprocess-using-shell
-    subprocess.run("echo " + param, shell=True)
+    safe_command.run(subprocess.run, "echo " + param, shell=True)
 
     # ok: insecure-subprocess-using-shell
     subprocess.run("echo ", shell=True)
     # ok: insecure-subprocess-using-shell
-    subprocess.run(f"echo {param} ")
+    safe_command.run(subprocess.run, f"echo {param} ")
     # ok: insecure-subprocess-using-shell
-    subprocess.run(f"echo {param} ", shell=False)
+    safe_command.run(subprocess.run, f"echo {param} ", shell=False)
